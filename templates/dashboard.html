@@ -4,126 +4,82 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
-
 <body class="page-bg">
-
-<!-- HEADER -->
 <div class="header">
-    <h2>🛍️ Smart Product Recommender Dashboard</h2>
-
+    <h2>Smart Product Recommender Dashboard</h2>
     <div>
         <a href="/analytics" class="header-btn">Analytics</a>
         <a href="/logout" class="header-btn">Logout</a>
     </div>
 </div>
-
-<!-- MAIN CONTENT -->
 <div class="page-container">
-
     <div class="welcome">
-        <h3>Welcome, {{ name }} 👋</h3>
+        <h3>Welcome, {{ name }} </h3>
     </div>
-
-    <!-- FORM (GET METHOD) -->
     <div class="form-box">
         <form method="GET" action="/dashboard">
-            
             <input class="input-field" type="number" name="budget" placeholder="Enter Budget" value="{{ request.args.get('budget', '') }}">
-
             <button class="btn btn-success" type="submit">
                 Get Recommendations
             </button>
-
-            <!-- 🔥 RESET BUTTON -->
             <a href="/dashboard" class="btn btn-primary" style="margin-left:10px;">
                 Reset
             </a>
-
         </form>
     </div>
-
-    <!-- 🔥 SHOW CURRENT FILTER -->
     {% if request.args.get('budget') %}
     <p style="color:green; margin-top:10px;">
         Showing results under ₹{{ request.args.get('budget') }}
     </p>
     {% endif %}
-
     {% if recommendations %}
     <div class="section-title">Recommended Products</div>
-
     <div id="productContainer" class="grid">
-
         {% for item in recommendations %}
         <div class="card product-item">
-
-            <!-- Product Display -->
             <h4>{{ item.brand if item.brand else "Unknown Brand" }}</h4>
             <p>{{ item.category if item.category else "General Product" }}</p>
-
             <p class="price">₹ {{ item.price }}</p>
-
             <form method="POST" action="/buy_product">
                 <input type="hidden" name="product_id" value="{{ item.product_id }}">
                 <button class="btn btn-primary" type="submit">Buy Now</button>
             </form>
-
         </div>
         {% endfor %}
-
     </div>
-
     <button id="loadMoreBtn" class="btn btn-primary" style="display:none;">
         Load More
     </button>
     {% endif %}
-
 </div>
-
-<!-- SCROLL TO TOP -->
 <button onclick="scrollToTop()" id="topBtn" class="btn btn-primary" 
         style="position: fixed; bottom: 25px; right: 25px; display:none;">
-    ⬆
+    ^
 </button>
-
 <script>
-
-// Scroll to top button
 window.onscroll = function(){
     let btn = document.getElementById("topBtn");
     btn.style.display = document.documentElement.scrollTop > 200 ? "block":"none";
 }
-
 function scrollToTop(){
     window.scrollTo({top:0,behavior:"smooth"});
 }
-
-
-// Load More functionality
 let items = document.querySelectorAll(".product-item");
 let visible = 20;
-
 items.forEach((item, index) => {
     if (index >= visible) item.style.display = "none";
 });
-
 let btn = document.getElementById("loadMoreBtn");
-
 if (items.length > 20) {
     btn.style.display = "inline-block";
 }
-
 btn.addEventListener("click", () => {
     let hidden = [...items].filter(i => i.style.display === "none");
-
     hidden.slice(0, 20).forEach(el => el.style.display = "block");
-
     if ([...items].filter(i => i.style.display === "none").length === 0) {
         btn.style.display = "none";
     }
 });
-
 </script>
-
 </body>
 </html>
