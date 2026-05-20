@@ -121,7 +121,7 @@ def get_user_vector(user_id):
 # =====================================================
 # 🔥 RECOMMENDATION (ML BASED)
 # =====================================================
-def ml_recommend(user_id, top_n=20):
+def ml_recommend(user_id, top_n=5):
 
     if _model is None:
         train_model()
