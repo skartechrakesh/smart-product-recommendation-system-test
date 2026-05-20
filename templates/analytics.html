@@ -5,94 +5,68 @@
     <link rel="stylesheet" href="/static/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
 <body class="page-bg">
-
-<!-- HEADER -->
 <div class="header header-center">
-    <h2>📊 Model Analytics Dashboard</h2>
+    <h2>Model Analytics Dashboard</h2>
 </div>
-
-<!-- CHARTS -->
 <div class="page-container">
     <div class="grid">
-
         <div class="card">
             <h3>Age Distribution</h3>
             <canvas id="ageChart"></canvas>
         </div>
-
         <div class="card">
             <h3>Gender Distribution</h3>
             <canvas id="genderChart"></canvas>
         </div>
-
         <div class="card">
             <h3>Price Distribution</h3>
             <canvas id="priceChart"></canvas>
         </div>
-
         <div class="card">
             <h3>Cluster Distribution</h3>
             <canvas id="clusterChart"></canvas>
         </div>
-
         <div class="card wide-card">
             <h3>Age vs Price (Scatter)</h3>
             <canvas id="scatterChart"></canvas>
         </div>
-
         <div class="card">
             <h3>Age Histogram</h3>
             <canvas id="ageHist"></canvas>
         </div>
-
         <div class="card">
             <h3>Price Histogram</h3>
             <canvas id="priceHist"></canvas>
         </div>
-
     </div>
 </div>
-
-<!-- TABLES -->
 <div class="page-container">
-    <h2>📋 Reports Summary</h2>
-
+    <h2>Reports Summary</h2>
     <div class="grid">
-
         <div class="card">
             <h3>Age Group Distribution</h3>
             <table id="ageTable"></table>
         </div>
-
         <div class="card">
             <h3>Gender Distribution</h3>
             <table id="genderTable"></table>
         </div>
-
         <div class="card">
             <h3>Price Group Distribution</h3>
             <table id="priceTable"></table>
         </div>
-
         <div class="card wide-card">
             <h3>Cluster Insights</h3>
             <table id="clusterTable"></table>
         </div>
-
     </div>
 </div>
-
 <script>
-
-// 🔥 FETCH HELPER
 async function fetchData(url) {
     const res = await fetch(url);
     return await res.json();
 }
-
-// 🔥 CHART CREATOR
 function createChart(id, type, labels, data, label = "") {
     new Chart(document.getElementById(id), {
         type: type,
@@ -110,8 +84,6 @@ function createChart(id, type, labels, data, label = "") {
         }
     });
 }
-
-// 🔥 HISTOGRAM HELPER
 function createHistogram(dataArray, binSize) {
     const bins = {};
     dataArray.forEach(val => {
@@ -120,15 +92,12 @@ function createHistogram(dataArray, binSize) {
     });
     return bins;
 }
-
-// 🔥 BASIC CHARTS
 const chartConfigs = [
     { url: '/api/age_distribution', id: 'ageChart', type: 'bar', label: 'Age Groups' },
     { url: '/api/gender_distribution', id: 'genderChart', type: 'pie', customLabels: ['Male','Female'] },
     { url: '/api/price_distribution', id: 'priceChart', type: 'bar', label: 'Price Groups' },
     { url: '/api/cluster_distribution', id: 'clusterChart', type: 'bar', label: 'Clusters' }
 ];
-
 chartConfigs.forEach(c => {
     fetchData(c.url).then(data => {
         const labels = c.customLabels || Object.keys(data);
@@ -136,14 +105,11 @@ chartConfigs.forEach(c => {
         createChart(c.id, c.type, labels, values, c.label);
     });
 });
-
-// 🔥 SCATTER
 fetchData('/api/scatter_data').then(data => {
     const points = data.age.map((a, i) => ({
         x: a,
         y: data.price[i]
     }));
-
     new Chart(document.getElementById('scatterChart'), {
         type: 'scatter',
         data: {
@@ -160,38 +126,22 @@ fetchData('/api/scatter_data').then(data => {
         }
     });
 });
-
-// 🔥 HISTOGRAMS
 fetchData('/api/histogram_data').then(data => {
-
     const ageBins = createHistogram(data.age, 5);
     createChart('ageHist', 'bar', Object.keys(ageBins), Object.values(ageBins), 'Age Frequency');
-
     const priceBins = createHistogram(data.price, 500);
     createChart('priceHist', 'bar', Object.keys(priceBins), Object.values(priceBins), 'Price Frequency');
-
 });
-
-
-// =====================================================
-// 🔥 TABLE BUILDER (FIXED)
-// =====================================================
 function createTable(id, data) {
-
     let table = document.getElementById(id);
-
-    // ✅ FIXED CLUSTER TABLE (ARRAY)
     if (id === "clusterTable") {
-
         let html = "<tr><th>Cluster</th><th>User Type</th></tr>";
-
         data.forEach(item => {
             html += `<tr>
                         <td>${item.cluster}</td>
                         <td>${item.type}</td>
                      </tr>`;
         });
-
         table.innerHTML = html;
     } 
     else {
@@ -203,17 +153,9 @@ function createTable(id, data) {
                         <td>${data[key]}</td>
                      </tr>`;
         }
-
         table.innerHTML = html;
     }
 }
-
-
-// =====================================================
-// 🔥 LOAD TABLES (FIXED)
-// =====================================================
-
-// Normal tables
 fetch('/api/table_data')
 .then(res => res.json())
 .then(data => {
@@ -221,15 +163,11 @@ fetch('/api/table_data')
     createTable("genderTable", data.gender);
     createTable("priceTable", data.price);
 });
-
-// 🔥 FIXED CLUSTER CALL
 fetch('/api/cluster_insights')
 .then(res => res.json())
 .then(data => {
     createTable("clusterTable", data);
 });
-
 </script>
-
 </body>
 </html>
