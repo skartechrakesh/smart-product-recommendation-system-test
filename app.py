@@ -12,10 +12,6 @@ from sklearn.preprocessing import StandardScaler
 app = Flask(__name__)
 app.secret_key = "secret_key"
 
-
-# =====================================================
-# USER ID GENERATION
-# =====================================================
 def generate_user_id():
     conn = sqlite3.connect("database.db")
     cursor = conn.cursor()
@@ -32,18 +28,10 @@ def generate_user_id():
 
     return f"UID{str(db_max + 1).zfill(5)}"
 
-
-# =====================================================
-# HOME
-# =====================================================
 @app.route('/')
 def index():
     return render_template("index.html")
 
-
-# =====================================================
-# REGISTER
-# =====================================================
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -56,7 +44,7 @@ def register():
             confirm_password = request.form['confirm_password']
 
             if password != confirm_password:
-                return "❌ Passwords do not match"
+                return "Passwords do not match"
 
             conn = sqlite3.connect("database.db")
             cursor = conn.cursor()
@@ -64,7 +52,7 @@ def register():
             cursor.execute("SELECT * FROM users WHERE email=?", (email,))
             if cursor.fetchone():
                 conn.close()
-                return "❌ Email already registered"
+                return "Email already registered"
 
             user_id = generate_user_id()
 
@@ -83,10 +71,6 @@ def register():
 
     return render_template("register.html")
 
-
-# =====================================================
-# LOGIN
-# =====================================================
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -109,14 +93,10 @@ def login():
             session['name'] = user[1]
             return redirect('/dashboard')
 
-        return "❌ Invalid credentials"
+        return "Invalid credentials"
 
     return render_template("login.html")
 
-
-# =====================================================
-# DASHBOARD
-# =====================================================
 @app.route('/dashboard')
 def dashboard():
 
@@ -142,14 +122,9 @@ def dashboard():
 
     return render_template("dashboard.html", name=name, recommendations=recommendations)
 
-
-# =====================================================
-# BUY PRODUCT
-# =====================================================
 @app.route('/buy_product', methods=['POST'])
 def buy_product():
 
-    # 🔐 Check login
     if 'user_id' not in session:
         return redirect('/login')
 
@@ -157,13 +132,12 @@ def buy_product():
     product_id = request.form.get('product_id')
 
     if not product_id:
-        return "❌ Product ID missing"
+        return "Product ID missing"
 
     try:
         conn = sqlite3.connect("database.db")
         cursor = conn.cursor()
 
-        # 🔍 Check if already purchased
         cursor.execute("""
             SELECT 1 FROM purchases WHERE user_id=? AND product_id=?
         """, (user_id, product_id))
@@ -172,7 +146,6 @@ def buy_product():
             conn.close()
             return redirect('/dashboard')
 
-        # 🔍 Fetch product details
         cursor.execute("""
             SELECT category, brand, price FROM products WHERE product_id=?
         """, (product_id,))
@@ -181,11 +154,10 @@ def buy_product():
 
         if not product:
             conn.close()
-            return "❌ Product not found"
+            return "Product not found"
 
         category, brand, price = product
 
-        # 💾 Insert into purchases
         cursor.execute("""
             INSERT INTO purchases (user_id, product_id, category, brand, price)
             VALUES (?, ?, ?, ?, ?)
@@ -195,22 +167,14 @@ def buy_product():
         conn.close()
 
     except Exception as e:
-        return f"❌ Error: {str(e)}"
+        return f"Error: {str(e)}"
 
     return redirect('/dashboard')
 
-
-# =====================================================
-# ANALYTICS PAGE
-# =====================================================
 @app.route('/analytics')
 def analytics():
     return render_template("analytics.html")
 
-
-# =====================================================
-# CLEAN MERGE
-# =====================================================
 def get_merged_df():
     users, products, purchases = load_data()
 
@@ -225,10 +189,6 @@ def get_merged_df():
 
     return df
 
-
-# =====================================================
-# CLUSTER FUNCTION
-# =====================================================
 def get_clustered_df():
     df = get_merged_df()
 
@@ -245,11 +205,6 @@ def get_clustered_df():
 
     return df
 
-
-# =====================================================
-# API ROUTES (ALL PRESENT — FIXES 404)
-# =====================================================
-
 @app.route('/api/age_distribution')
 def age_distribution():
     users, _, _ = load_data()
@@ -259,7 +214,6 @@ def age_distribution():
     )
 
     return jsonify(users['agegroup'].value_counts().to_dict())
-
 
 @app.route('/api/gender_distribution')
 def gender_distribution():
@@ -277,7 +231,6 @@ def price_distribution():
 
     return jsonify(products['pricegroup'].value_counts().to_dict())
 
-
 @app.route('/api/cluster_distribution')
 def cluster_distribution():
     df = get_clustered_df()
@@ -287,10 +240,6 @@ def cluster_distribution():
 
     return jsonify(df['cluster'].value_counts().to_dict())
 
-
-# =====================================================
-# CLUSTER INSIGHTS (🔥 FORCED DISTINCT LABELS)
-# =====================================================
 @app.route('/api/cluster_insights')
 def cluster_insights():
     df = get_clustered_df()
@@ -305,10 +254,8 @@ def cluster_insights():
         'age': 'mean'
     }).reset_index()
 
-    # 🔥 Sort clusters by price (to give meaningful order)
     cluster_stats = cluster_stats.sort_values(by='cluster')
 
-    # 🔥 Predefined labels (guaranteed diversity)
     labels = [
         "Budget Users",
         "Frequent Buyers",
@@ -327,7 +274,6 @@ def cluster_insights():
         })
 
     return jsonify(result)
-
 
 @app.route('/api/scatter_data')
 def scatter_data():
@@ -372,18 +318,10 @@ def table_data():
         "price": products['pricegroup'].value_counts().to_dict()
     })
 
-
-# =====================================================
-# LOGOUT
-# =====================================================
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect('/')
 
-
-# =====================================================
-# RUN
-# =====================================================
 if __name__ == "__main__":
     app.run(debug=True)
