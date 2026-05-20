@@ -2,6 +2,9 @@ from flask import Flask, render_template, request, redirect, session, jsonify
 import sqlite3
 
 from recommendation_model import load_data, ml_recommend, ml_budget_recommend
+from recommendation_model import train_model
+
+train_model()
 
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
