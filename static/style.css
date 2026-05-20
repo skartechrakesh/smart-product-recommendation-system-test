@@ -1,0 +1,269 @@
+/* =========================
+   GLOBAL
+========================= */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* =========================
+   BACKGROUNDS
+========================= */
+.app-bg {
+    background: linear-gradient(to right, #4facfe, #00f2fe);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.page-bg {
+    background: #f4f7fb;
+    min-height: 100vh;
+}
+
+/* =========================
+   CONTAINERS
+========================= */
+.center-box {
+    background: white;
+    padding: 40px;
+    border-radius: 18px;
+    box-shadow: 0px 15px 40px rgba(0,0,0,0.25);
+    width: 400px;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.center-box:hover {
+    transform: translateY(-5px);
+}
+
+.page-container {
+    padding: 30px;
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    text-align: center;
+}
+
+/* =========================
+   TEXT
+========================= */
+.subtitle {
+    color: #007bff;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.description {
+    color: #555;
+    font-size: 14px;
+    margin-bottom: 25px;
+}
+
+.section-title {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* =========================
+   HEADER
+========================= */
+.header {
+    background: #007bff;
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-center {
+    justify-content: center;
+}
+
+.header-btn {
+    background: white;
+    color: #007bff;
+    padding: 8px 15px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* =========================
+   INPUTS
+========================= */
+.input-field {
+    width: 92%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+.btn {
+    display: inline-block;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+    text-align: center;
+}
+
+.btn-primary {
+    background: #007bff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #0056b3;
+    transform: scale(1.03);
+}
+
+.btn-success {
+    background: #28a745;
+    color: white;
+}
+
+.btn-success:hover {
+    background: #218838;
+    transform: scale(1.03);
+}
+
+.btn-outline {
+    border: 2px solid #007bff;
+    color: #007bff;
+}
+
+.btn-outline:hover {
+    background: #007bff;
+    color: white;
+}
+
+/* MENU BUTTON (INDEX PAGE) */
+.menu-btn {
+    display: block;
+    margin: 12px auto;
+    width: 75%;
+}
+
+/* =========================
+   GRID & CARD
+========================= */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 20px;
+}
+
+canvas {
+    width: 100% !important;
+    height: 300px !important;
+}
+
+.card {
+    background: white;
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: 0px 6px 18px rgba(0,0,0,0.1);
+    text-align: left;
+}
+
+.price {
+    color: #28a745;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+/* =========================
+   FORMS
+========================= */
+.form-box {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 320px;
+    box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
+    margin: auto;
+}
+
+/* =========================
+   LINKS
+========================= */
+.link-text {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* =========================
+   TABLES
+========================= */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+table th {
+    background: #007bff;
+    color: white;
+}
+
+/* =========================
+   SPECIAL
+========================= */
+.wide-card {
+    grid-column: span 2;
+    min-height: 400px;
+}
+
+@media (max-width: 768px) {
+    .wide-card {
+        grid-column: span 1;
+    }
+}
+
+/* =========================
+   SCROLL & LOAD BUTTONS
+========================= */
+#loadMoreBtn {
+    margin-top: 25px;
+    display: none;
+}
+
+#topBtn {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    display: none;
+}

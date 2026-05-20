@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body class="app-bg">
+
+    <!-- 🔥 KEEP THIS SCRIPT (IMPORTANT) -->
+    <script>
+        const params = new URLSearchParams(window.location.search);
+
+        if (params.get("registered") === "true") {
+            const userId = params.get("uid");
+
+            if (userId) {
+                alert("Your User Id to Login is: " + userId);
+            }
+
+            // Clean URL after showing popup
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    </script>
+
+    <div class="center-box">
+
+        <h1>🛍️ Smart Product Recommender</h1>
+        <h2>Create Account</h2>
+
+        <form method="POST">
+
+            <input class="input-field" type="text" name="name" placeholder="Full Name" required>
+
+            <input class="input-field" type="email" name="email" placeholder="Email Address" required>
+
+            <input class="input-field" type="number" name="age" placeholder="Age" min="10" max="100" required>
+
+            <!-- Gender -->
+            <div style="margin: 12px 0; text-align: left;">
+                <strong>Gender:</strong>
+
+                <label style="margin-left: 10px;">
+                    <input type="radio" name="gender" value="0" required> Male
+                </label>
+
+                <label style="margin-left: 10px;">
+                    <input type="radio" name="gender" value="1"> Female
+                </label>
+            </div>
+
+            <input class="input-field" type="password" name="password" placeholder="Password" required>
+
+            <input class="input-field" type="password" name="confirm_password" placeholder="Confirm Password" required>
+
+            <button class="btn btn-success" type="submit">Register</button>
+
+        </form>
+
+        <p class="link-text">Already have an account?</p>
+        <a href="/login">Login Here</a>
+
+    </div>
+
+</body>
+</html>
