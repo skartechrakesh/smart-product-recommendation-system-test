@@ -89,7 +89,7 @@ def train_model():
     _interaction_matrix = matrix
 
     # SVD (latent factors)
-    svd = TruncatedSVD(n_components=20, random_state=42)
+    svd = TruncatedSVD(n_components=5, random_state=42)
     user_factors = svd.fit_transform(matrix)
     product_factors = svd.components_.T
 
