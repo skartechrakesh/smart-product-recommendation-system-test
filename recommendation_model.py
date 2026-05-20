@@ -70,7 +70,7 @@ def train_model():
 
     _interaction_matrix = matrix
 
-    svd = TruncatedSVD(n_components=5, random_state=42)
+    svd = TruncatedSVD(n_components=8, random_state=42)
     user_factors = svd.fit_transform(matrix)
     product_factors = svd.components_.T
 
@@ -94,7 +94,7 @@ def get_user_vector(user_id):
     idx = _user_index.index(user_id)
     return _model["user_factors"][idx]
 
-def ml_recommend(user_id, top_n=5):
+def ml_recommend(user_id, top_n=12):
 
     if _model is None:
         train_model()
