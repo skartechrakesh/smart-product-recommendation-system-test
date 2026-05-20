@@ -1,28 +1,7 @@
-"""
-=====================================================
-        DATABASE SETUP
-=====================================================
-
-This file:
-✔ Creates database tables
-✔ Does NOT generate UserID
-✔ Used only for initial setup
-"""
-
 import sqlite3
-
-
-# =====================================================
-# 🔥 CREATE DATABASE & TABLES
-# =====================================================
 def create_database():
-
     conn = sqlite3.connect("database.db")
     cursor = conn.cursor()
-
-    # -----------------------------
-    # USERS TABLE
-    # -----------------------------
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -34,10 +13,6 @@ def create_database():
         password TEXT NOT NULL
     )
     """)
-
-    # -----------------------------
-    # PRODUCTS TABLE
-    # -----------------------------
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS products (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -50,10 +25,6 @@ def create_database():
         purchase_intent INTEGER
     )
     """)
-
-    # -----------------------------
-    # PURCHASES TABLE
-    # -----------------------------
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS purchases (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -64,15 +35,8 @@ def create_database():
         price REAL
     )
     """)
-
     conn.commit()
     conn.close()
-
-    print("✅ Database tables created successfully!")
-
-
-# =====================================================
-# 🔥 RUN FILE (ONLY TABLE CREATION)
-# =====================================================
+    print("Database tables created successfully!")
 if __name__ == "__main__":
     create_database()
