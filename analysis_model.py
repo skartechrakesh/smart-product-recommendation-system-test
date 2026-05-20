@@ -4,7 +4,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, accuracy_score
 from sklearn.cluster import KMeans
-
 def load_data():
     conn = sqlite3.connect("database.db")
     users = pd.read_sql("SELECT * FROM users", conn)
